@@ -15,12 +15,12 @@ public:
         numberproces = j;
         valueofproces = k;
     }
-    int setnumberproces(int number)
+    void setnumberproces(int number)
     {
         numberproces=number;
 
     }
-    int valueproces(int number){
+    void valueproces(int number){
         valueofproces=number;
     }
     int getnumbermachine() {
@@ -50,7 +50,7 @@ ostream &operator<<(ostream &out, Job object) {
 
 }
 
-void NehQue(vector<Job> tab, vector<Job> tab1, vector<Job> tab2, int numberofproces) {
+void NehQue(vector<Job> tab, vector<Job> tab1, vector<Job> tab2, int numberofproces,int *tabque) {
     sort(tab.begin(), tab.end());
     vector<Job> tmp;
     Job example;
@@ -64,7 +64,7 @@ void NehQue(vector<Job> tab, vector<Job> tab1, vector<Job> tab2, int numberofpro
         while (tab[tmpneh].getnumberproces() != tab2[tmp2].getnumberproces()) {
             tmp2++;
         }
-        for (int i = 0; i < numberofproces; i++) {
+
             int help = 0;
             int help2=0;
             help2=tab[tmpneh].getnumberproces();
@@ -72,13 +72,16 @@ void NehQue(vector<Job> tab, vector<Job> tab1, vector<Job> tab2, int numberofpro
             example.setnumberproces(help2);
             example.valueproces(help);
             tmp.push_back(example);
-        }
         tmpneh++;
     }
     sort(tmp.begin(),tmp.end());
     for(int i=0 ;i<numberofproces;i++)
     {
         cout<<tmp[i]<<endl;
+    }
+    for(int i=0;i<numberofproces;i++)
+    {
+        tabque[i]=tmp[i].getnumberproces();
     }
 
 }
@@ -88,6 +91,7 @@ int main() {
     Job object;
     vector<Job> tab, tab1, tab2;
     int decision = 0;
+    int tabnehque[decision];
     cout << "Podaj liczbe procesow na maszynie: " << endl;
     cin >> decision;
     for (int i = 1; i < decision + 1; i++) {
@@ -112,6 +116,10 @@ int main() {
         tab2.push_back(object);
     }
 
-    NehQue(tab,tab1,tab2,decision);
+    NehQue(tab,tab1,tab2,decision,tabnehque);
+    for(int i=0;i<decision;i++)
+    {
+        cout<<"Kolejka NEH to: "<<tabnehque[i]<<endl;
+    }
     return 0;
 }
