@@ -80,10 +80,10 @@ void NehQue(vector<Job> tab, int np, int *tabhelp) {
 
 }
 
-void NehAlgorithm(vector<Job> tab, int *tabhelp, int np, int nm) {
+int NehAlgorithm(vector<Job> tab, int *tabhelp, int np, int nm) {
     int timmachine[nm];
     int prioritique[nm];
-    int Cmax1=0,Cmax2=0;
+    int Cmax1 = 0, Cmax2 = 0;
     for (int i = 1; i < nm + 1; i++) {
         timmachine[i] = 0;
     }
@@ -104,10 +104,10 @@ void NehAlgorithm(vector<Job> tab, int *tabhelp, int np, int nm) {
                 if (timmachine[i - 1] >= timmachine[i]) {
                     timmachine[i] = timmachine[i - 1] - timmachine[i];
                     timmachine[i] = timmachine[i] + tab[tmp].getvalue();
-                  //  cout << "Tutaj jestem! " << timmachine[i] << endl;
+                  //    cout << "Tutaj jestem! " << timmachine[i] << endl;
                 } else {
                     timmachine[i] = timmachine[i] + tab[tmp].getvalue();
-                 //   cout << "Tutaj jestem! " << timmachine[i] << endl;
+                  //    cout << "Tutaj jestem! " << timmachine[i] << endl;
 
                 }
                 if (i == nm && j == 0) {
@@ -115,21 +115,22 @@ void NehAlgorithm(vector<Job> tab, int *tabhelp, int np, int nm) {
                     timmachine[i] = timmachine[i] + timmachine[i - 1];
                 }
             }
-            if( i == nm )
-            {
-                Cmax1=timmachine[i];
+            if (i == nm) {
+                Cmax1 = timmachine[i];
             }
 
 
         }
     }
-    for (int i = 1; i < nm + 1; i++) {
+   /* for (int i = 1; i < nm + 1; i++) {
         cout << "Całkowity czas realizacji to: " << timmachine[i] << endl;
     }
-    for(int j=0;j<np;j++) {
+*/    for(int j=0;j<np;j++) {
         cout << "Kolejnosc wykonania procesow to: " << tabhelp[j] << endl;
     }
+    cout<<"KONIEC"<<endl;
 
+    return Cmax1;
 
 }
 
@@ -155,27 +156,41 @@ int main() {
             tab.push_back(object);
         }
     }
+
+
+
     NehQue(tab, np, tabhelp);
     int tabpom[np];
-    int tmp3=1,tmp2=3;
-    for(int i=0;i<np;i++)
-    {
-        tabpom[i]=tabhelp[i];
+    int Cmax=0,Cmaxhelp=0;
+    int permutation=0;
+    for (int i = 0; i < np; i++) {
+        int r=i;
+        Cmax = Cmax+Cmaxhelp;
+        tabpom[i] = tabhelp[i];
+        int pom=0;
+        while(r != 0) {
+            --r;
 
-        do{
+            pom = NehAlgorithm(tab, tabpom, i, nm);
+            if(Cmaxhelp >= pom)
+            {
+                Cmaxhelp=pom;
+            }
+            prev_permutation(tabpom,tabpom+i);
+        }
+        if(r==0)
+        {
+            Cmax=NehAlgorithm(tab,tabpom,i,nm);
+        }
 
-            NehAlgorithm(tab, tabpom, tmp3, tmp2);
-            cout<<"Wypisane: "<<tabpom[i]<<endl;
-        }while( next_permutation(tabpom,tabpom+tmp3)) ;
-
-
-        tmp3++;
     }
 
-    cout << "Kolejka to: " << endl;
+    /*cout << "Kolejka to: " << endl;
     for (int i = 0; i < np; i++) {
         cout << tabhelp[i] << ";";
     }
+    cout<<endl;*/
+    cout<<"Optymalny Cmax algorytmu NEH to: "<<Cmax<<endl;
 
 
 }
